@@ -57,7 +57,7 @@ class MentorSearchHandler(http.server.SimpleHTTPRequestHandler):
             if query:
                 for mentor in MENTOR_DATA:
                     # Search in relevant fields including name
-                    searchable_text = f"{mentor.get('mentorname', '')} {mentor.get('companynm', '')} {mentor.get('departnm', '')} {mentor.get('introduce', '')} {mentor.get('duty_joined', '')} {mentor.get('actcategory_joined', '')}".lower()
+                    searchable_text = f"{mentor.get('mentorno', '')} {mentor.get('companynm', '')} {mentor.get('departnm', '')} {mentor.get('introduce', '')} {mentor.get('duty_joined', '')} {mentor.get('actcategory_joined', '')}".lower()
                     
                     if query in searchable_text:
                         results.append(mentor)
