@@ -192,6 +192,9 @@
     const resultsDiv = document.getElementById('results');
     const searchBtn = document.getElementById('searchBtn');
 
+    // Initial load (show all or some default)
+    fetchResults('');
+
     // Enter key support
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
