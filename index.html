@@ -191,31 +191,17 @@
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
     const searchBtn = document.getElementById('searchBtn');
-    let debounceTimer;
-
-    // Initial load (show all or some default)
-    fetchResults('');
 
     // Enter key support
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            clearTimeout(debounceTimer);
             fetchResults(searchInput.value);
         }
     });
 
     // Button click support
     searchBtn.addEventListener('click', () => {
-        clearTimeout(debounceTimer);
         fetchResults(searchInput.value);
-    });
-
-    // Debounce input (optional, can keep or remove if button is preferred)
-    searchInput.addEventListener('input', (e) => {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-            fetchResults(e.target.value);
-        }, 500); // Increased debounce time slightly
     });
 
     async function fetchResults(query) {
