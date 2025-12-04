@@ -46,6 +46,8 @@
             padding: 10px 0;
             z-index: 100;
             backdrop-filter: blur(5px);
+            display: flex;
+            gap: 10px;
         }
 
         input[type="text"] {
@@ -58,9 +60,35 @@
             transition: border-color 0.3s;
         }
 
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
         input[type="text"]:focus {
             border-color: var(--primary-color);
             outline: none;
+        }
+
+        #searchBtn {
+            padding: 0 25px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        #searchBtn:hover {
+            background-color: #003070;
         }
 
         #results {
@@ -145,11 +173,12 @@
 <div class="container">
     <header>
         <h1>UOS 멘토 검색</h1>
-        <p>선배들의 생생한 멘토링 정보를 찾아보세요.</p>
+        <p>2025-12-04 기준 데이터입니다.</p>
     </header>
 
     <div class="search-box">
         <input type="text" id="searchInput" placeholder="회사, 직무, 키워드로 검색하세요... (예: 삼성전자, 마케팅)">
+        <button id="searchBtn">검색</button>
     </div>
 
     <div id="results">
@@ -160,16 +189,32 @@
 <script>
     const searchInput = document.getElementById('searchInput');
     const resultsDiv = document.getElementById('results');
+    const searchBtn = document.getElementById('searchBtn');
     let debounceTimer;
 
     // Initial load (show all or some default)
     fetchResults('');
 
+    // Enter key support
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            clearTimeout(debounceTimer);
+            fetchResults(searchInput.value);
+        }
+    });
+
+    // Button click support
+    searchBtn.addEventListener('click', () => {
+        clearTimeout(debounceTimer);
+        fetchResults(searchInput.value);
+    });
+
+    // Debounce input (optional, can keep or remove if button is preferred)
     searchInput.addEventListener('input', (e) => {
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
             fetchResults(e.target.value);
-        }, 300);
+        }, 500); // Increased debounce time slightly
     });
 
     async function fetchResults(query) {
@@ -196,7 +241,7 @@
                 <div class="card-header">
                     <div>
                         <div class="company">
-                            ${mentor.mentorname || '이름 미기재'} 
+                            ${maskName(mentor.mentorname) || '이름 미기재'} 
                             <span style="font-size: 0.8em; color: #666; font-weight: normal;">(${mentor.companynm || '회사명 미기재'})</span>
                         </div>
                         <div class="dept">${mentor.departnm || '부서 미기재'}</div>
@@ -214,6 +259,12 @@
                 <div class="introduce">${mentor.introduce || ''}</div>
             </div>
         `).join('');
+    }
+
+    function maskName(name) {
+        if (!name) return '';
+        if (name.length <= 1) return name;
+        return name.charAt(0) + '*'.repeat(name.length - 1);
     }
 </script>
 
