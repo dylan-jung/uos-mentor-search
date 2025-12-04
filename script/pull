@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# 변수 설정
+IMAGE_NAME="uos-mentor-search"
+TAG="latest"
+REGISTRY="image-registry.dylearning.com"
+
+# 최신 이미지 pull
+docker pull $REGISTRY/$IMAGE_NAME:$TAG
+
+# 기존 컨테이너 중지 & 컨테이너 삭제
+docker compose down
+
+# 새 이미지로 compose 다시 실행
+docker compose up -d
+
+# 사용하지 않는 이미지 정리
+docker image prune -f
+
+echo "==== 업데이트 완료 ===="

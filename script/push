@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# 변수 설정
+IMAGE_NAME="uos-mentor-search"
+TAG="latest"
+REGISTRY="image-registry.dylearning.com"
+
+# 로그인 (Docker Hub일 경우)
+docker login $REGISTRY
+
+# 빌드
+docker build -t $IMAGE_NAME:$TAG .
+
+# 태그 지정
+docker tag $IMAGE_NAME:$TAG $REGISTRY/$IMAGE_NAME:$TAG
+
+# push
+docker push $REGISTRY/$IMAGE_NAME:$TAG
+
+echo "==== Docker Push 완료 ===="
